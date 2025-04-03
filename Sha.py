@@ -14,9 +14,15 @@ num_iteracoes = 100
 csv_filename = "sha256_benchmark.csv"
 
 # Função para gerar um arquivo com dados aleatórios
+import string
+import random
+
+# Função para gerar um arquivo com texto aleatório
 def gerar_arquivo(nome_arquivo, tamanho):
-    with open(nome_arquivo, "wb") as f:
-        f.write(os.urandom(tamanho))
+    with open(nome_arquivo, "w", encoding="utf-8") as f:
+        # Gera um texto aleatório com caracteres alfanuméricos
+        conteudo = ''.join(random.choices(string.ascii_letters + string.digits, k=tamanho))
+        f.write(conteudo)
 
 # Função para calcular o hash SHA-256 de um arquivo
 def calcular_hash(nome_arquivo):
@@ -28,7 +34,7 @@ def calcular_hash(nome_arquivo):
 # Criar e abrir o arquivo CSV para armazenar os tempos com cabeçalho
 with open(csv_filename, "w", newline="", encoding="utf-8") as csvfile:
     writer = csv.writer(csvfile)
-    writer.writerow(["Tipo de Encriptação", "Tamanho do Arquivo (bytes)", "Tempo de Encriptação (μs)", "Tempo de Verificação (μs)"])
+    writer.writerow(["Tipo de Encriptação", "Tamanho do Arquivo (bytes)", "Iteração", "Tempo de Encriptação (μs)"])
     
     # Lista para armazenar os nomes dos arquivos gerados
     arquivos_gerados = []
@@ -36,19 +42,16 @@ with open(csv_filename, "w", newline="", encoding="utf-8") as csvfile:
     # Loop pelos diferentes tamanhos de arquivo
     for tamanho in tamanhos_arquivos:
         for i in range(num_arquivos):
-            nome_arquivo = f"arquivo_{tamanho}_{i}.bin"
+            nome_arquivo = f"arquivo_{tamanho}_{i}.txt"
             gerar_arquivo(nome_arquivo, tamanho)
             arquivos_gerados.append(nome_arquivo)
             
-            for _ in range(num_iteracoes):
+            for iteracao in range(num_iteracoes):
                 # Medir tempo de hashing
                 tempo_encriptacao = timeit.timeit(lambda: calcular_hash(nome_arquivo), number=1) * 1e6  # Convertendo para microssegundos
-                
-                # Medir tempo de verificação (recalculando o hash para simular a verificação)
-                tempo_verificacao = timeit.timeit(lambda: calcular_hash(nome_arquivo), number=1) * 1e6  # Convertendo para microssegundos
-                
+                                
                 # Armazenar os dados no CSV
-                writer.writerow(["SHA-256", tamanho, tempo_encriptacao, tempo_verificacao])
+                writer.writerow(["SHA-256", tamanho, iteracao + 1, tempo_encriptacao])  # "N/A" para tempo de verificação (se não implementado)
     
     # Remover todos os arquivos gerados após o processamento
         for arquivo in arquivos_gerados:

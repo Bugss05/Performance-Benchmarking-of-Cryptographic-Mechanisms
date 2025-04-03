@@ -44,6 +44,10 @@ def aes_decrypt(data, key, iv):
     return unpadder.update(decrypted_data) + unpadder.finalize()
 
 # Function to measure encryption and decryption times
+import timeit  # Import timeit for precise timing
+# ...existing code...
+
+# Function to measure encryption and decryption times
 def measure_aes_performance(folder, key, iv, iteration, writer, iterations=100):
     nFile = 0
     for filename in sorted(os.listdir(folder)):
@@ -59,17 +63,21 @@ def measure_aes_performance(folder, key, iv, iteration, writer, iterations=100):
         decryption_times = []
 
         for i in range(iterations):
-            # Measure encryption time
-            start_time = time.time()
-            encrypted_data = aes_encrypt(data, key, iv)
-            encryption_time = (time.time() - start_time) * 1e6
+            # Measure encryption time using timeit
+            encryption_time = timeit.timeit(
+                lambda: aes_encrypt(data, key, iv),
+                number=1
+            ) * 1e6  # Convert to microseconds
 
-            # Measure decryption time
-            start_time = time.time()
-            decrypted_data = aes_decrypt(encrypted_data, key, iv)
-            decryption_time = (time.time() - start_time) * 1e6
+            # Measure decryption time using timeit
+            encrypted_data = aes_encrypt(data, key, iv)  # Encrypt once for decryption timing
+            decryption_time = timeit.timeit(
+                lambda: aes_decrypt(encrypted_data, key, iv),
+                number=1
+            ) * 1e6  # Convert to microseconds
 
             # Verify correctness
+            decrypted_data = aes_decrypt(encrypted_data, key, iv)
             assert data == decrypted_data, "Decrypted data does not match original!"
             
             # Write data to csv
@@ -79,7 +87,6 @@ def measure_aes_performance(folder, key, iv, iteration, writer, iterations=100):
         os.remove(filepath)
      
     print("-"*30)
-
 # Main execution
 def main():
     

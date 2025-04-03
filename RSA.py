@@ -123,10 +123,12 @@ def freak_in_the_sheets(directory, iter_per_file=100):
                 encrypted_data, encryption_time = RSA_encrypt(public_key, data)
                 decryption_time = RSA_decrypt(private_key, encrypted_data, data)
 
-                with open(results_file, "w") as f:
+                with open(results_file, "a") as f:
                     f.write(f"RSA, {size}, {i+1}, {encryption_time}, {decryption_time}\n")
 
-                print(f"File: {filename}, Size: {size}")
+            # print(f"File: {filename}, Size: {size}")
+
+        directory = os.path.dirname(directory)  # Update the directory to its parent
 
     os.remove(directory)  # Remove the directory after processing
 
