@@ -18,6 +18,18 @@ def generate_random_files(sizes, folder="random_files"):
 
 # Function to encrypt data using AES-256
 def aes_encrypt(data, key, iv):
+    """ Explicação da class Cipher():
+    
+        - Algorithms: declaração do algoritmo a usar. Neste caso, AES
+        
+        - Modes: define o modo de funcionamento do AES, ou seja, a sua variação. Usamos
+        neste caso o CBC, que combina cada bloco com o seu anterior por XOR, exceto o
+        primeiro, que é encriptado segundo uma chave (iv) com o tamanho do bloco (16 bits)
+        
+        - Backend: define o script que realiza as operações criptográficas necessárias.
+        Escolhemos o default_backend(), baseado em OpenSSL, por ser dos mais usados e testados.
+    """
+    
     cipher = Cipher(algorithms.AES(key), modes.CBC(iv), backend=default_backend())
     encryptor = cipher.encryptor()
     padder = padding.PKCS7(algorithms.AES.block_size).padder()
