@@ -84,8 +84,8 @@ def save_results_to_csv(results, output_file="performance_results.csv"):
             writer.writerow([file_size, times[0], times[1]])
 
 # Main execution
-if __name__ == "__main__":
-
+def main():
+    
     # File sizes in bytes
     sizes = [8, 64, 512, 4096, 32768, 262144, 2097152]
 
@@ -133,5 +133,8 @@ if __name__ == "__main__":
                          "Median Encryption Time (µs)", "Median Decryption Time (µs)"])
         for file_size, times in sorted(processed_results.items()):
             writer.writerow([file_size, times[0], times[1], times[2], times[3]])
+            
+if __name__ == "__main__":
+    main()
 
     
