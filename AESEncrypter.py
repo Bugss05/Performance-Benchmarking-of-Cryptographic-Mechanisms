@@ -7,6 +7,7 @@ import csv
 import statistics
 import matplotlib.pyplot as plt
 import timeit
+from Separator import mainB
 
 
 # Function to generate random files of specified sizes
@@ -115,6 +116,4 @@ def main():
             
 if __name__ == "__main__":
     main()
-            
-if __name__ == "__main__":
-    main()
+    mainB() # To separate the files by Modes          
