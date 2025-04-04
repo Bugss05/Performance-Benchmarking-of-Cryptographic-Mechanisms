@@ -92,27 +92,29 @@ def main():
     key = os.urandom(32)  # 256-bit key
     iv = os.urandom(16)   # 128-bit IV (block size for AES)
 
-
-    # AES modes to test
-    modes = {
-        "CBC": Cipher(algorithms.AES(key), modes.CBC(iv), backend=default_backend()),
-        "CFB": Cipher(algorithms.AES(key), modes.CFB(iv), backend=default_backend()),
-        "OFB": Cipher(algorithms.AES(key), modes.OFB(iv), backend=default_backend()),
-        "CTR": Cipher(algorithms.AES(key), modes.CTR(iv), backend=default_backend())
-    }
-
     # Perform 1000 iterations
     number_file_generations = 1000
-    
+
     with open(os.path.join("Stats", "AES_performance.csv"), mode="w", newline="") as csvfile:
         writer = csv.writer(csvfile)
         writer.writerow(["Algorithm-Mode", "File Size", "Iteration", "Encryption Time (µs)", "Decryption Time (µs)"])
         
-        for mode_name, mode in modes.items():
-            for iteration in range(number_file_generations):
+        for iteration in range(number_file_generations):
+            # Define AES modes inside the loop to avoid scoping issues
+            aes_modes = {
+                "CBC": Cipher(algorithms.AES(key), modes.CBC(iv), backend=default_backend()),
+                "CFB": Cipher(algorithms.AES(key), modes.CFB(iv), backend=default_backend()),
+                "OFB": Cipher(algorithms.AES(key), modes.OFB(iv), backend=default_backend()),
+                "CTR": Cipher(algorithms.AES(key), modes.CTR(iv), backend=default_backend())
+            }
+
+            for mode_name, mode in aes_modes.items():
                 folder_name = f"random_files"
                 generate_random_files(sizes, folder=folder_name)
                 measure_aes_performance(folder_name, key, iv, mode_name, mode, iteration+1, writer)
+            
+if __name__ == "__main__":
+    main()
             
 if __name__ == "__main__":
     main()
