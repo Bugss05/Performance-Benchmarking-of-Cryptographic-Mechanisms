@@ -3,18 +3,10 @@ import timeit
 import csv
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.backends import default_backend
-<<<<<<< HEAD
 import string
 import random
 # Definição dos tamanhos dos arquivos em bytes
-=======
 
-#-------------------------------------------------------
-
-# Constantes:
-
-# Tamanhos dos arquivos em bytes
->>>>>>> 92925d11b5e329a2ff3eba28bbce17e28f84b1e8
 tamanhos_arquivos = [8, 64, 512, 4096, 32768, 262144, 2097152]
 # Número de arquivos a serem gerados para cada tamanho
 num_arquivos = 1000
@@ -23,16 +15,6 @@ num_iteracoes = 100
 # Nome do arquivo CSV para armazenar os resultados
 csv_filename = "sha256_benchmark.csv"
 
-<<<<<<< HEAD
-=======
-#-------------------------------------------------------
-
-
-# Função para gerar um arquivo com dados aleatórios
-import string
-import random
-
->>>>>>> 92925d11b5e329a2ff3eba28bbce17e28f84b1e8
 # Função para gerar um arquivo com texto aleatório
 def gerar_arquivo(nome_arquivo, tamanho):
     with open(nome_arquivo, "w", encoding="utf-8") as f:
