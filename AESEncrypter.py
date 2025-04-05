@@ -18,12 +18,12 @@ def generate_random_files(sizes, folder="random_files"):
 def aes_encrypt(data, cipher):
     """ Explicação da class Cipher():
     
-        - Algorithms: declaração do algoritmo a usar. Neste caso, AES
+        - algorithms: declaração do algoritmo a usar. Neste caso, AES
         
-        - Modes: define o modo de funcionamento do AES, ou seja, uma das variações existentes
+        - modes: define o modo de funcionamento do AES, ou seja, uma das variações existentes
         deste algoritmo. Foram testados os modos CBC, CFB, OFB e CTR.
         
-        - Backend: define o script que realiza as operações criptográficas necessárias.
+        - backend: define o script que realiza as operações criptográficas necessárias.
         Escolhemos o default_backend(), baseado em OpenSSL, por ser dos mais usados e testados.
     """
     encryptor = cipher.encryptor()
@@ -55,14 +55,14 @@ def measure_aes_performance(folder, mode_name, mode, iteration, writer, iteratio
             data = f.read()
 
         for i in range(iterations):
-            # Measure encryption time using timeit
+            # Measure encryption time
             encryption_time = timeit.timeit(
                 lambda: aes_encrypt(data, mode),
                 number=1
             ) * 1e6  # Convert to microseconds
 
-            # Measure decryption time using timeit
-            encrypted_data = aes_encrypt(data, mode)  # Encrypt once for decryption timing
+            # Measure decryption time
+            encrypted_data = aes_encrypt(data, mode)
             decryption_time = timeit.timeit(
                 lambda: aes_decrypt(encrypted_data, mode),
                 number=1
@@ -87,7 +87,7 @@ def main():
     # File sizes in bytes
     sizes = [8, 64, 512, 4096, 32768, 262144, 2097152]
 
-    # AES-256 key and IV
+    # AES-256 key and IV (key for padding)
     key = os.urandom(32)  # 256-bit key
     iv = os.urandom(16)   # 128-bit IV (block size for AES)
 

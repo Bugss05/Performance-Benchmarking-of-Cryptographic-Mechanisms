@@ -37,22 +37,23 @@ def create_random_files(base_directory, files_number=1000):
             file_name = f"file_{i + 1}.txt"
 
             # Determine the correct directory based on file size
-            if file_size == 2:
-                target_directory = size_categories["2_bytes"]
-            elif file_size == 4:
-                target_directory = size_categories["4_bytes"]
-            elif file_size == 8:
-                target_directory = size_categories["8_bytes"]
-            elif file_size == 16:
-                target_directory = size_categories["16_bytes"]
-            elif file_size == 32:
-                target_directory = size_categories["32_bytes"]
-            elif file_size == 64:
-                target_directory = size_categories["64_bytes"]
-            elif file_size == 128:
-                target_directory = size_categories["128_bytes"]
-            else:
-                target_directory = size_categories["others"]
+            match file_size:
+                case 2:
+                    target_directory = size_categories["2_bytes"]
+                case 4:
+                    target_directory = size_categories["4_bytes"]
+                case 8:
+                    target_directory = size_categories["8_bytes"]
+                case 16:
+                    target_directory = size_categories["16_bytes"]
+                case 32:
+                    target_directory = size_categories["32_bytes"]
+                case 64:
+                    target_directory = size_categories["64_bytes"]
+                case 128:
+                    target_directory = size_categories["128_bytes"]
+                case _:
+                    target_directory = size_categories["others"]
 
             # Write the file to the appropriate directory
             with open(os.path.join(target_directory, file_name), "w") as file:
@@ -65,7 +66,10 @@ def create_csv_file():
     return file
 
 def RSA_encrypt(public_key, data):
+    # Start timer
     start_time = timeit.default_timer()
+    
+    # Do encryption operations
     ciphertext = public_key.encrypt(
         data,
         padding.OAEP(
@@ -74,12 +78,16 @@ def RSA_encrypt(public_key, data):
             label=None
         )
     )
+    
+    # Stop timer and get final time
     encryption_time = (timeit.default_timer() - start_time) * 1_000_000  # Convert to microseconds
     return ciphertext, encryption_time
 
 def RSA_decrypt(private_key, ciphertext, original_data):
-
+    # Start timer
     start_time = timeit.default_timer()
+    
+    # Do decryption operations
     plaintext = private_key.decrypt(
         ciphertext,
         padding.OAEP(
@@ -88,11 +96,23 @@ def RSA_decrypt(private_key, ciphertext, original_data):
             label=None
         )
     )
+    
+    # Stop timer and get final time
     decryption_time = (timeit.default_timer() - start_time) * 1_000_000  # Convert to microseconds
+    # Verify if decryption was successful
     assert plaintext == original_data, "Decryption failed!"
     return decryption_time
 
 def generate_RSA_keys():
+    """ Explicação dos argumentos em rsa.generate_private_key():
+        - public_exponent: O valor do expoente público, tipicamente definido como 65537, devido
+        ao equilíbrio entre segurança e desempenho.
+        
+        - key_size: O tamanho da chave RSA em bits. Neste caso, 2048.
+        
+        - backend: define o script que realiza as operações criptográficas necessárias.
+        Escolhemos o default_backend(), baseado em OpenSSL, por ser dos mais usados e testados.
+    """
     private_key = rsa.generate_private_key(
         public_exponent=65537,
         key_size=2048,
@@ -102,7 +122,7 @@ def generate_RSA_keys():
 
     return private_key, public_key
 
-def freak_in_the_sheets(directory, iter_per_file=100):
+def main(directory, iter_per_file=100):
     
     create_random_files(directory) # if wanted, add the number of files to be different from 1000
     results_file = create_csv_file()
@@ -126,6 +146,7 @@ def freak_in_the_sheets(directory, iter_per_file=100):
                 with open(results_file, "a") as f:
                     f.write(f"RSA, {size}, {i+1}, {encryption_time}, {decryption_time}\n")
 
+            # Print disabled for better performance and speed
             # print(f"File: {filename}, Size: {size}")
 
         directory = os.path.dirname(directory)  # Update the directory to its parent
@@ -138,5 +159,5 @@ directory = os.path.join(os.getcwd(), "RSA_files")
 if __name__ == "__main__":
 
     # Run the RSA encryption and decryption process 
-    freak_in_the_sheets(directory)
+    main(directory)
                     
