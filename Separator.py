@@ -16,6 +16,7 @@ def mainB():
         group.to_csv(output_file, index=False)
         print(f"Salvo: {output_file}")
     
+    # Remover o csv inicial para poupar espaco
     os.remove(input_file)
     print(f"Removido: {input_file}")
     
