@@ -172,3 +172,4 @@ https://repo.anaconda.com/pkgs/main/win-64/numpy-2.2.4-py313he6dc315_0.conda
 https://repo.anaconda.com/pkgs/main/win-64/numexpr-2.10.1-py313h4cd664f_0.conda
 https://repo.anaconda.com/pkgs/main/win-64/scipy-1.15.2-py313hd4070db_1.conda
 https://repo.anaconda.com/pkgs/main/win-64/pandas-2.2.3-py313h5da7b33_0.conda
+https://repo.anaconda.com/pkgs/main/win-64/seaborn-0.13.2-py313haa95532_2.conda
